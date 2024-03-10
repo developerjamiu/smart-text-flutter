@@ -1,3 +1,4 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+### Added
+* Added a method `classifyText` that parses text in a sequence of texts and links
