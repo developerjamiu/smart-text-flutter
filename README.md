@@ -2,12 +2,23 @@
 
 A Flutter plugin used to find links in plain texts.
 
+|             | Android | iOS   |
+|-------------|---------|-------|
+| **Support** | SDK 19+ | 11.0+ |
+
 It uses [NSDataDetector](https://developer.apple.com/documentation/foundation/nsdatadetector) for iOS and [TextClassifier](https://developer.android.com/reference/android/view/textclassifier/TextClassifier) for Android.
 
 It exposes a static method `classifyText` which returns a list of ItemSpan with the classified texts arranged in sequence. The ItemSpan contains the text and the type of text (where the type can either be an address, email, datetime, url, phone and a text).
 
 Here's example which shows how to implement widget that uses the `classifyText` method and turns the ItemSpans into clickable links:
 
+## Usage
+
+To use this plugin, add `smart_text_flutter` as a [dependency in your pubspec.yaml file](https://flutter.dev/platform-plugins/).
+
+### Example
+
+<?code-excerpt "lib/smart_text.dart (basic-example)"?>
 ```dart
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -114,3 +125,7 @@ class _SmartTextState extends State<SmartText> {
   }
 }
 ```
+
+### Android
+
+Address and DateTime are not supported on Android 8.1 (API 27) and below
