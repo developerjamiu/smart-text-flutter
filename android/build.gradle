@@ -46,7 +46,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 28
+        minSdkVersion 19
     }
 
     dependencies {

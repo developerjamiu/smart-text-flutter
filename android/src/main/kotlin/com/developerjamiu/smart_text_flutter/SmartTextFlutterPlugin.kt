@@ -1,7 +1,9 @@
 package com.developerjamiu.smart_text_flutter
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
+import android.os.Build
 import android.view.textclassifier.TextClassificationManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -19,6 +21,7 @@ class SmartTextFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var activity: Activity? = null
     private val mainScope = CoroutineScope(Dispatchers.Main)
     private lateinit var textClassificationManager: TextClassificationManager
+    private lateinit var textClassifer: TextClassifer
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "smart_text_flutter")
@@ -36,6 +39,7 @@ class SmartTextFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     }
                     result.success(itemSpans.map { it.toMap() })
                 } catch (e: Throwable) {
+                    println(e)
                     result.success(itemSpans)
                 }
             }
@@ -67,12 +71,21 @@ class SmartTextFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         activity = null
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
     private fun initClassificationManager() {
+        textClassifer = AndroidTextClassifer()
         textClassificationManager =
             activity?.getSystemService(Context.TEXT_CLASSIFICATION_SERVICE) as TextClassificationManager;
     }
 
     private fun classifyText(text: String?): List<ItemSpan> {
-        return AndroidTextClassifer(textClassificationManager).classifyText(text);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            return textClassifer.detectLinksWithTextClassifier(
+                text,
+                textClassificationManager.textClassifier,
+            );
+        } else {
+            return textClassifer.detectLinksWithLinkify(text);
+        }
     }
 }
