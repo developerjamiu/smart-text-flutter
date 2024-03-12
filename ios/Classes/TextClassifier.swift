@@ -24,7 +24,7 @@ class AppleTextClassifier : TextClassifier {
         var resultList = [ItemSpan]()
         
         if links.isEmpty {
-            return text.isEmpty ? [ItemSpan(text: text, type: "text")] : []
+            return text.isEmpty ? [ItemSpan(text: text, type: "text",rawValue: text)] : []
         }
         
         var previousEnd = 0
@@ -32,33 +32,39 @@ class AppleTextClassifier : TextClassifier {
         for link in links {
             let textBefore = String(text[text.index(text.startIndex, offsetBy: previousEnd)..<text.index(text.startIndex, offsetBy: link.start)])
             if !textBefore.isEmpty {
-                resultList.append(ItemSpan(text: textBefore, type: "text"))
+                resultList.append(ItemSpan(text: textBefore, type: "text",rawValue: textBefore))
             }
             
             let entityType = link.type
             let linkType: String
+            let rawValue: String
             
             switch entityType {
-            case .address:
+            case .address(let address):
                 linkType = "address"
-            case .phone:
+                rawValue = address
+            case .phone(let phone):
                 linkType = "phone"
-            case .email:
+                rawValue = phone
+            case .email(let email):
                 linkType = "email"
-            case .datetime:
+                rawValue = email
+            case .datetime(let date):
                 linkType = "datetime"
-            case .url:
+                rawValue = date
+            case .url(let url):
                 linkType = "url"
+                rawValue = url
             }
             
-            let linkSpan = ItemSpan(text: String(text[text.index(text.startIndex, offsetBy: link.start)..<text.index(text.startIndex, offsetBy: link.end)]), type: linkType)
+            let linkSpan = ItemSpan(text: String(text[text.index(text.startIndex, offsetBy: link.start)..<text.index(text.startIndex, offsetBy: link.end)]), type: linkType, rawValue: rawValue)
             resultList.append(linkSpan)
             previousEnd = link.end
         }
         
         let textAfter = String(text[text.index(text.startIndex, offsetBy: links.last!.end)...])
         if !textAfter.isEmpty {
-            resultList.append(ItemSpan(text: textAfter, type: "text"))
+            resultList.append(ItemSpan(text: textAfter, type: "text",  rawValue: textAfter))
         }
         
         return resultList
@@ -68,11 +74,13 @@ class AppleTextClassifier : TextClassifier {
 struct ItemSpan {
     let text: String
     let type: String
+    let rawValue: String
     
     func toMap() -> [String: Any] {
         return [
             "text": text,
-            "type": type
+            "type": type,
+            "rawValue": rawValue
         ]
     }
 }

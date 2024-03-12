@@ -32,11 +32,11 @@ struct DataDetectorResult {
     let type: ResultType
     
     enum ResultType {
-        case url
-        case email
-        case phone
-        case address
-        case datetime
+        case url(String)
+        case email(String)
+        case phone(String)
+        case address(String)
+        case datetime(String)
     }
 }
 
@@ -70,20 +70,28 @@ extension NSDataDetector {
             guard let url = match.url else { return nil }
             
             if url.absoluteString.hasPrefix("mailto:") {
-                return DataDetectorResult(start: match.range.lowerBound,end: match.range.upperBound, type: .email)
+                return DataDetectorResult(start: match.range.lowerBound,end: match.range.upperBound, type: .email(url.absoluteString))
             } else {
-                return DataDetectorResult(start: match.range.lowerBound,end: match.range.upperBound, type: .url)
+                return DataDetectorResult(start: match.range.lowerBound,end: match.range.upperBound, type: .url(url.absoluteString))
             }
         } else if match.resultType == .phoneNumber {
-            return DataDetectorResult(start: match.range.lowerBound,end: match.range.upperBound, type: .phone)
+            guard let phone = match.phoneNumber else { return nil }
+            
+            return DataDetectorResult(start: match.range.lowerBound,end: match.range.upperBound, type: .phone("tel://" + phone))
         } else if match.resultType == .address {
-            return DataDetectorResult(start: match.range.lowerBound,end: match.range.upperBound, type: .address)
+            guard let address = match.addressComponents?.values.first else { return nil }
+            
+            return DataDetectorResult(start: match.range.lowerBound,end: match.range.upperBound, type: .address(address))
         } else if match.resultType == .date {
-            return DataDetectorResult(start: match.range.lowerBound,end: match.range.upperBound, type: .datetime)
+            guard let date = match.date else { return nil }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+            let dateString = dateFormatter.string(from: date)
+            
+            return DataDetectorResult(start: match.range.lowerBound,end: match.range.upperBound, type: .datetime(dateString))
         }
         
         return nil
     }
-    
-    
 }
