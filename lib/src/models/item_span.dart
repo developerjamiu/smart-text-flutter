@@ -21,8 +21,15 @@ class ItemSpan {
     required this.rawValue,
   });
 
+  /// The text or link text to render
   final String text;
+
+  /// The raw value used to perform actions like open an email when email text
+  /// is clicked
   final String rawValue;
+
+  /// The type of the span
+  /// This is either be an address, email, phone number, url, date time or text
   final ItemSpanType type;
 
   factory ItemSpan.fromMap(Map<String, dynamic> map) {

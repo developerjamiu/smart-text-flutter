@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_text_flutter/src/extensions/item_span_default_config.dart';
 import 'package:smart_text_flutter/smart_text_flutter.dart';
 
+/// The smart text which automatically detect links in text and renders them
 class SmartText extends StatefulWidget {
   const SmartText(
     this.text, {
@@ -15,12 +16,27 @@ class SmartText extends StatefulWidget {
     this.urlConfig,
   });
 
+  /// The text to linkify
+  /// This text will be classified and the links will be highlighted
   final String text;
+
+  /// The configuration for setting the [TextStyle] and onClicked method
+  /// This affects the whole text
   final ItemSpanConfig? config;
+
+  /// The configuration for setting the [TextStyle] and what happens when the address link is clicked
   final ItemSpanConfig? addressConfig;
+
+  /// The configuration for setting the [TextStyle] and what happens when the phone link is clicked
   final ItemSpanConfig? phoneConfig;
+
+  /// The configuration for setting the [TextStyle] and what happens when the url is clicked
   final ItemSpanConfig? urlConfig;
+
+  /// The configuration for setting the [TextStyle] and what happens when the date time is clicked
   final ItemSpanConfig? dateTimeConfig;
+
+  /// The configuration for setting the [TextStyle] and what happens when the email link is clicked
   final ItemSpanConfig? emailConfig;
 
   @override
