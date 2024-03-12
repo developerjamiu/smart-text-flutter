@@ -8,124 +8,200 @@ A Flutter plugin used to find links in plain texts.
 
 It uses [NSDataDetector](https://developer.apple.com/documentation/foundation/nsdatadetector) for iOS and [TextClassifier](https://developer.android.com/reference/android/view/textclassifier/TextClassifier) for Android.
 
-It exposes a static method `classifyText` which returns a list of ItemSpan with the classified texts arranged in sequence. The ItemSpan contains the text and the type of text (where the type can either be an address, email, datetime, url, phone and a text).
+**Texts (links) can be among these 6 types**
 
-Here's example which shows how to implement widget that uses the `classifyText` method and turns the ItemSpans into clickable links:
-
+```Dart
+enum ItemSpanType { address, phone, email, datetime, url, text }
+```
 ## Usage
 
 To use this plugin, add `smart_text_flutter` as a [dependency in your pubspec.yaml file](https://flutter.dev/platform-plugins/).
 
-### Example
-
-<?code-excerpt "lib/smart_text.dart (basic-example)"?>
-```dart
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:smart_text_flutter/smart_text_flutter.dart';
-
-class SmartText extends StatefulWidget {
-  const SmartText(this.text, {super.key});
-
-  final String text;
-
-  @override
-  State<SmartText> createState() => _SmartTextState();
-}
-
-class _SmartTextState extends State<SmartText> {
-  late Future<List<ItemSpan>> classifyTextFuture;
-
-  @override
-  void initState() {
-    super.initState();
-
-    classifyTextFuture = getItemSpans();
-  }
-
-  @override
-  void didUpdateWidget(covariant SmartText oldWidget) {
-    if (oldWidget.text != widget.text) classifyTextFuture = getItemSpans();
-
-    super.didUpdateWidget(oldWidget);
-  }
-
-  Future<List<ItemSpan>> getItemSpans() async {
-    return SmartTextFlutter.classifyText(widget.text);
-  }
+**Example**
+```Dart
+class SmartTextFlutterExample extends StatelessWidget {
+  const SmartTextFlutterExample({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ItemSpan>>(
-      future: classifyTextFuture,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Text(widget.text);
-        }
+    const text =
+        'Here is a text with an address: 36 Lagos Street written at 9 PM by someone with phone: +2340000000000 and you can reach him at reaching@email.com or you can check twitter.com';
 
-        return Text.rich(
-          TextSpan(
-            children: [
-              for (final span in snapshot.data!)
-                switch (span.type) {
-                  ItemSpanType.text => TextSpan(
-                      text: span.text,
-                    ),
-                  ItemSpanType.address => TextSpan(
-                      text: span.text,
-                      // replace with link style
-                      style: const TextStyle(color: Colors.red),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // perform address related action
-                        },
-                    ),
-                  ItemSpanType.email => TextSpan(
-                      text: span.text,
-                      // replace with link style
-                      style: const TextStyle(color: Colors.blue),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // perform email related action
-                        },
-                    ),
-                  ItemSpanType.phone => TextSpan(
-                      text: span.text,
-                      // replace with link style
-                      style: const TextStyle(color: Colors.green),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // perform phone related action
-                        },
-                    ),
-                  ItemSpanType.datetime => TextSpan(
-                      text: span.text,
-                      // replace with link style
-                      style: const TextStyle(color: Colors.indigo),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // perform datetime related action
-                        },
-                    ),
-                  ItemSpanType.url => TextSpan(
-                      text: span.text,
-                      // replace with link style
-                      style: const TextStyle(color: Colors.amber),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // perform url related action
-                        },
-                    ),
-                }
-            ],
-          ),
-        );
-      },
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Smart Text Flutter'),
+        ),
+        body: const Center(
+          child: SmartText(text),
+        ),
+      ),
     );
   }
 }
 ```
+**Demo**
 
-### Android
+![ScreenRecording2024-03-12at17 38 55-ezgif com-resize](https://github.com/developerjamiu/smart-text-flutter/assets/50176100/dfb4f68e-77d3-4acc-9e07-a27239aa519b)
 
-Address and DateTime are not supported on Android 8.1 (API 27) and below
+
+## Notes
+
+- DateTime is not supported on Android
+- Address is not supported on Android 8.1 (API 27) and below
+- There is no default implementation for when DateTime is clicked (the formatted date returned in the callback in case)
+
+## Properties
+```Dart
+  /// The text to linkify
+  /// This text will be classified and the links will be highlighted
+  final String text;
+
+  /// The configuration for setting the [TextStyle] and onClicked method
+  /// This affects the whole text
+  final ItemSpanConfig? config;
+
+  /// The configuration for setting the [TextStyle] and what happens when the address link is clicked
+  final ItemSpanConfig? addressConfig;
+
+  /// The configuration for setting the [TextStyle] and what happens when the phone link is clicked
+  final ItemSpanConfig? phoneConfig;
+
+  /// The configuration for setting the [TextStyle] and what happens when the url is clicked
+  final ItemSpanConfig? urlConfig;
+
+  /// The configuration for setting the [TextStyle] and what happens when the date time is clicked
+  final ItemSpanConfig? dateTimeConfig;
+
+  /// The configuration for setting the [TextStyle] and what happens when the email link is clicked
+  final ItemSpanConfig? emailConfig;
+```
+
+**ItemSpanConfig**
+```Dart
+  /// The [TextStyle] if the link
+  final TextStyle? textStyle;
+
+  /// The method called when a link is clicked
+  /// When the is set, the implementation will override the default
+  /// implementation
+  final void Function(String data)? onClicked;
+```
+
+**The smart text widget example**
+```Dart
+SmartText(
+  text,
+  config: const ItemSpanConfig(
+    textStyle: TextStyle(),
+  ),
+  addressConfig: ItemSpanConfig(
+    textStyle: const TextStyle(),
+    onClicked: (_) {},
+  ),
+  emailConfig: ItemSpanConfig(
+    textStyle: const TextStyle(),
+    onClicked: (_) {},
+  ),
+  phoneConfig: ItemSpanConfig(
+    textStyle: const TextStyle(),
+    onClicked: (_) {},
+  ),
+  urlConfig: ItemSpanConfig(
+    textStyle: const TextStyle(),
+    onClicked: (_) {},
+  ),
+  dateTimeConfig: ItemSpanConfig(
+    textStyle: const TextStyle(),
+    onClicked: (_) {},
+  ),
+)
+```
+
+**Code from the example folder.**
+
+```Dart
+class SmartTextFlutterExample extends StatefulWidget {
+  const SmartTextFlutterExample({super.key});
+
+  @override
+  State<SmartTextFlutterExample> createState() =>
+      _SmartTextFlutterExampleState();
+}
+
+class _SmartTextFlutterExampleState extends State<SmartTextFlutterExample> {
+  final List<String> messageTexts = [];
+
+  late final _messageController = TextEditingController();
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Smart Text Flutter'),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: messageTexts.length,
+                itemBuilder: (context, index) => Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.sizeOf(context).width * 0.8,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: Colors.blueGrey.shade50,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.all(8),
+                    child: SmartText(
+                      messageTexts[index],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter text',
+                        contentPadding: EdgeInsets.all(8),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() => messageTexts.add(_messageController.text));
+                      _messageController.clear();
+                    },
+                    child: const Text('Send Message'),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 40),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
