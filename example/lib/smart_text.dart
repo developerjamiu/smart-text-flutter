@@ -2,16 +2,16 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_text_flutter/smart_text_flutter.dart';
 
-class SmartText extends StatefulWidget {
-  const SmartText(this.text, {super.key});
+class SmartTextExample extends StatefulWidget {
+  const SmartTextExample(this.text, {super.key});
 
   final String text;
 
   @override
-  State<SmartText> createState() => _SmartTextState();
+  State<SmartTextExample> createState() => _SmartTextExampleState();
 }
 
-class _SmartTextState extends State<SmartText> {
+class _SmartTextExampleState extends State<SmartTextExample> {
   late Future<List<ItemSpan>> classifyTextFuture;
 
   @override
@@ -22,7 +22,7 @@ class _SmartTextState extends State<SmartText> {
   }
 
   @override
-  void didUpdateWidget(covariant SmartText oldWidget) {
+  void didUpdateWidget(covariant SmartTextExample oldWidget) {
     if (oldWidget.text != widget.text) classifyTextFuture = getItemSpans();
 
     super.didUpdateWidget(oldWidget);

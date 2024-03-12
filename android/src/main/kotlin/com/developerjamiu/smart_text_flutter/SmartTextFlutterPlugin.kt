@@ -39,7 +39,6 @@ class SmartTextFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     }
                     result.success(itemSpans.map { it.toMap() })
                 } catch (e: Throwable) {
-                    println(e)
                     result.success(itemSpans)
                 }
             }

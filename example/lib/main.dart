@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_text_flutter_example/smart_text.dart';
+import 'package:smart_text_flutter/smart_text_flutter.dart';
 
 void main() {
   runApp(const SmartTextFlutterExample());
