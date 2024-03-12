@@ -1,3 +1,8 @@
+## 0.2.0
+
+### Added
+* Added the SmartText widget which automatically detects links in text
+
 ## 0.1.0
 
 ### Added
