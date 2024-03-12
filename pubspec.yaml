@@ -1,6 +1,6 @@
 name: smart_text_flutter
 description: "A Flutter plugin used to detect links in texts using NSDataDetector on iOS and TextClassifier on Android"
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/developerjamiu/smart-text-flutter
 
 environment:
