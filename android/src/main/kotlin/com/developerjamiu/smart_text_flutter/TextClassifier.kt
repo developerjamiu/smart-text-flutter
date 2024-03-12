@@ -7,6 +7,7 @@ import android.text.style.URLSpan
 import android.text.util.Linkify
 import android.view.textclassifier.TextClassifier
 import android.view.textclassifier.TextLinks
+import android.view.textclassifier.TextSelection
 
 interface TextClassifer {
     fun detectLinksWithTextClassifier(text: String?, classifier: TextClassifier): List<ItemSpan>
@@ -81,7 +82,8 @@ class AndroidTextClassifer : TextClassifer {
         if (links.isEmpty()) return if (text.isNotEmpty()) listOf(
             ItemSpan(
                 text,
-                "text"
+                "text",
+                text,
             )
         ) else listOf()
 
@@ -90,18 +92,20 @@ class AndroidTextClassifer : TextClassifer {
         for (i in links.indices) {
             val currentLink = links[i]
             val textBefore = text.substring(previousEnd, currentLink.start)
-            if (textBefore.isNotEmpty()) resultList.add(ItemSpan(textBefore, "text"))
+            if (textBefore.isNotEmpty()) resultList.add(ItemSpan(textBefore, "text", textBefore))
 
+            val currentText = text.substring(currentLink.start, currentLink.end)
             val linkSpan: ItemSpan = when (currentLink.type) {
-                "address" -> ItemSpan(text.substring(currentLink.start, currentLink.end), "address")
-                "phone" -> ItemSpan(text.substring(currentLink.start, currentLink.end), "phone")
-                "email" -> ItemSpan(text.substring(currentLink.start, currentLink.end), "email")
+                "address" -> ItemSpan(currentText, "address", currentText)
+                "phone" -> ItemSpan(currentText, "phone", "tel://" + currentText)
+                "email" -> ItemSpan(currentText, "email", "mailto:" + currentText)
                 "datetime" -> ItemSpan(
-                    text.substring(currentLink.start, currentLink.end),
-                    "datetime"
+                    currentText,
+                    "datetime",
+                    currentText
                 )
-                "url" -> ItemSpan(text.substring(currentLink.start, currentLink.end), "url")
-                else -> ItemSpan(text.substring(currentLink.start, currentLink.end), "text")
+                "url" -> ItemSpan(currentText, "url", "http://" + currentText)
+                else -> ItemSpan(currentText, "text", currentText)
             }
 
             resultList.add(linkSpan)
@@ -109,7 +113,7 @@ class AndroidTextClassifer : TextClassifer {
         }
 
         val textAfter = text.substring(links.last().end)
-        if (textAfter.isNotEmpty()) resultList.add(ItemSpan(textAfter, "text"))
+        if (textAfter.isNotEmpty()) resultList.add(ItemSpan(textAfter, "text", textAfter))
 
         return resultList
     }
