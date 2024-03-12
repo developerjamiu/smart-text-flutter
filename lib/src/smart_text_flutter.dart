@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:smart_text_flutter/smart_text_flutter_platform_interface.dart';
 import 'package:smart_text_flutter/src/models/item_span.dart';
+import 'package:smart_text_flutter/src/smart_text_flutter_platform_interface.dart';
 
 class SmartTextFlutter {
   SmartTextFlutter._();

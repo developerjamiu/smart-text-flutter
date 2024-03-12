@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:smart_text_flutter/smart_text_flutter_method_channel.dart';
+import 'package:smart_text_flutter/src/smart_text_flutter_method_channel.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
