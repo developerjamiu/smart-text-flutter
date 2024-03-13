@@ -90,32 +90,32 @@ class SmartTextFlutterExample extends StatelessWidget {
 
 **The smart text widget example**
 ```Dart
-SmartText(
-  text,
-  config: const ItemSpanConfig(
-    textStyle: TextStyle(),
-  ),
-  addressConfig: ItemSpanConfig(
-    textStyle: const TextStyle(),
-    onClicked: (_) {},
-  ),
-  emailConfig: ItemSpanConfig(
-    textStyle: const TextStyle(),
-    onClicked: (_) {},
-  ),
-  phoneConfig: ItemSpanConfig(
-    textStyle: const TextStyle(),
-    onClicked: (_) {},
-  ),
-  urlConfig: ItemSpanConfig(
-    textStyle: const TextStyle(),
-    onClicked: (_) {},
-  ),
-  dateTimeConfig: ItemSpanConfig(
-    textStyle: const TextStyle(),
-    onClicked: (_) {},
-  ),
-)
+  SmartText(
+    text,
+    config: const ItemSpanConfig(
+      textStyle: TextStyle(),
+    ),
+    addressConfig: ItemSpanConfig(
+      textStyle: const TextStyle(),
+      onClicked: (_) {},
+    ),
+    emailConfig: ItemSpanConfig(
+      textStyle: const TextStyle(),
+      onClicked: (_) {},
+    ),
+    phoneConfig: ItemSpanConfig(
+      textStyle: const TextStyle(),
+      onClicked: (_) {},
+    ),
+    urlConfig: ItemSpanConfig(
+      textStyle: const TextStyle(),
+      onClicked: (_) {},
+    ),
+    dateTimeConfig: ItemSpanConfig(
+      textStyle: const TextStyle(),
+      onClicked: (_) {},
+    ),
+  )
 ```
 
 **Code from the example folder.**
