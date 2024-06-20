@@ -1,3 +1,8 @@
+## 0.2.2
+
+### Added
+* Include all the properties of the flutter's Text widget in the SmartText widget
+
 ## 0.2.1
 
 ### Added
