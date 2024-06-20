@@ -1,3 +1,5 @@
+import 'dart:ui' as ui show TextHeightBehavior;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_text_flutter/src/extensions/item_span_default_config.dart';
@@ -14,6 +16,18 @@ class SmartText extends StatefulWidget {
     this.emailConfig,
     this.phoneConfig,
     this.urlConfig,
+    this.strutStyle,
+    this.locale,
+    this.textAlign,
+    this.textDirection,
+    this.maxLines,
+    this.overflow,
+    this.selectionColor,
+    this.semanticsLabel,
+    this.softWrap,
+    this.textHeightBehavior,
+    this.textScaler,
+    this.textWidthBasis,
   });
 
   /// The text to linkify
@@ -38,6 +52,30 @@ class SmartText extends StatefulWidget {
 
   /// The configuration for setting the [TextStyle] and what happens when the email link is clicked
   final ItemSpanConfig? emailConfig;
+
+  final StrutStyle? strutStyle;
+
+  final TextAlign? textAlign;
+
+  final TextDirection? textDirection;
+
+  final Locale? locale;
+
+  final bool? softWrap;
+
+  final TextOverflow? overflow;
+
+  final TextScaler? textScaler;
+
+  final int? maxLines;
+
+  final String? semanticsLabel;
+
+  final TextWidthBasis? textWidthBasis;
+
+  final ui.TextHeightBehavior? textHeightBehavior;
+
+  final Color? selectionColor;
 
   @override
   State<SmartText> createState() => _SmartTextState();
@@ -73,6 +111,18 @@ class _SmartTextState extends State<SmartText> {
           return Text(
             widget.text,
             style: widget.config?.textStyle,
+            strutStyle: widget.strutStyle,
+            locale: widget.locale,
+            textAlign: widget.textAlign,
+            maxLines: widget.maxLines,
+            overflow: widget.overflow,
+            selectionColor: widget.selectionColor,
+            semanticsLabel: widget.semanticsLabel,
+            softWrap: widget.softWrap,
+            textDirection: widget.textDirection,
+            textHeightBehavior: widget.textHeightBehavior,
+            textScaler: widget.textScaler,
+            textWidthBasis: widget.textWidthBasis,
           );
         }
 
@@ -148,6 +198,18 @@ class _SmartTextState extends State<SmartText> {
               widget.config?.textStyle,
             ),
           ),
+          strutStyle: widget.strutStyle,
+          locale: widget.locale,
+          textAlign: widget.textAlign,
+          maxLines: widget.maxLines,
+          overflow: widget.overflow,
+          selectionColor: widget.selectionColor,
+          semanticsLabel: widget.semanticsLabel,
+          softWrap: widget.softWrap,
+          textDirection: widget.textDirection,
+          textHeightBehavior: widget.textHeightBehavior,
+          textScaler: widget.textScaler,
+          textWidthBasis: widget.textWidthBasis,
         );
       },
     );
