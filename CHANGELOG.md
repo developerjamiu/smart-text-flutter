@@ -1,3 +1,8 @@
+## 0.3.1
+
+### Added
+* Export smart selectable text
+
 ## 0.3.0
 
 ### Added
