@@ -1,3 +1,8 @@
+## 0.3.0
+
+### Added
+* Add smart selectable text
+
 ## 0.2.2
 
 ### Added
