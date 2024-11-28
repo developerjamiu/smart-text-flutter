@@ -13,11 +13,13 @@ protocol TextClassifier {
 
 class AppleTextClassifier : TextClassifier {
     func classifyText(text: String) -> [ItemSpan] {
+        let normalizedText = text.replacingOccurrences(of: "\r\n", with: "\n")
+        
         let detector = NSDataDetector(dataTypes: DataDetectorType.allCases)
         
-        let itemSpans: [DataDetectorResult] = detector.findMatches(in: text)
+        let itemSpans: [DataDetectorResult] = detector.findMatches(in: normalizedText)
         
-        return generateSmartTextItemsFromLinks(text: text, links: itemSpans)
+        return generateSmartTextItemsFromLinks(text: normalizedText, links: itemSpans)
     }
     
     private func generateSmartTextItemsFromLinks(text: String, links: [DataDetectorResult]) -> [ItemSpan] {
