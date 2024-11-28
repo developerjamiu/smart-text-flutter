@@ -3,7 +3,7 @@
 A Flutter plugin used to find links in plain texts.
 
 |             | Android | iOS   |
-|-------------|---------|-------|
+| ----------- | ------- | ----- |
 | **Support** | SDK 19+ | 11.0+ |
 
 It uses [NSDataDetector](https://developer.apple.com/documentation/foundation/nsdatadetector) for iOS and [TextClassifier](https://developer.android.com/reference/android/view/textclassifier/TextClassifier) for Android.
@@ -13,11 +13,13 @@ It uses [NSDataDetector](https://developer.apple.com/documentation/foundation/ns
 ```Dart
 enum ItemSpanType { address, phone, email, datetime, url, text }
 ```
+
 ## Usage
 
 To use this plugin, add `smart_text_flutter` as a [dependency in your pubspec.yaml file](https://flutter.dev/platform-plugins/).
 
 **Example**
+
 ```Dart
 class SmartTextFlutterExample extends StatelessWidget {
   const SmartTextFlutterExample({super.key});
@@ -40,10 +42,10 @@ class SmartTextFlutterExample extends StatelessWidget {
   }
 }
 ```
+
 **Demo**
 
 ![ScreenRecording2024-03-12at17 38 55-ezgif com-resize](https://github.com/developerjamiu/smart-text-flutter/assets/50176100/dfb4f68e-77d3-4acc-9e07-a27239aa519b)
-
 
 ## Notes
 
@@ -52,6 +54,7 @@ class SmartTextFlutterExample extends StatelessWidget {
 - There is no default implementation for when DateTime is clicked (the formatted date returned in the callback in case)
 
 ## Properties
+
 ```Dart
   /// The text to linkify
   /// This text will be classified and the links will be highlighted
@@ -75,9 +78,39 @@ class SmartTextFlutterExample extends StatelessWidget {
 
   /// The configuration for setting the [TextStyle] and what happens when the email link is clicked
   final ItemSpanConfig? emailConfig;
+
+  /// By default, URLs in the text (e.g., starting with http:// or https://) are displayed as-is.
+  /// Set humanize to true to remove the protocol (e.g., http:// or https://).
+  final bool humanize;
+
+  /// Other properties have the same usage as the Flutter text widget
+  final StrutStyle? strutStyle;
+
+  final TextAlign? textAlign;
+
+  final TextDirection? textDirection;
+
+  final Locale? locale;
+
+  final bool? softWrap;
+
+  final TextOverflow? overflow;
+
+  final TextScaler? textScaler;
+
+  final int? maxLines;
+
+  final String? semanticsLabel;
+
+  final TextWidthBasis? textWidthBasis;
+
+  final ui.TextHeightBehavior? textHeightBehavior;
+
+  final Color? selectionColor;
 ```
 
 **ItemSpanConfig**
+
 ```Dart
   /// The [TextStyle] if the link
   final TextStyle? textStyle;
@@ -89,6 +122,7 @@ class SmartTextFlutterExample extends StatelessWidget {
 ```
 
 **The smart text widget example**
+
 ```Dart
   SmartText(
     text,
@@ -206,5 +240,6 @@ class _SmartTextFlutterExampleState extends State<SmartTextFlutterExample> {
 }
 ```
 
-## Bugs/Requests 
+## Bugs/Requests
+
 If you encounter any problems feel free to open an issue [here](https://github.com/developerjamiu/smart-text-flutter/issues). If you feel the library is missing a feature, please raise a ticket on GitHub and I'll look into it. Pull requests are also welcome.
