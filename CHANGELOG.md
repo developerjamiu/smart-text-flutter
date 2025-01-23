@@ -1,3 +1,10 @@
+## 0.3.3
+
+### Added
+
+- Fix trailing protocol issue in urls on Android
+- Bump url launcher version on iOS
+
 ## 0.3.2
 
 ### Added
