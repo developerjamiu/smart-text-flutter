@@ -1,3 +1,9 @@
+## 0.3.4
+
+### Added
+
+- Fix url not launching
+
 ## 0.3.3
 
 ### Added
