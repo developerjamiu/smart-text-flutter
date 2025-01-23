@@ -94,8 +94,6 @@ extension ItemSpanDefaultConfig on ItemSpan {
   void _onUrlClicked(String url) => _launchUrl(url);
 
   void _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-
-    if (await canLaunchUrl(uri)) launchUrl(uri).ignore();
+    launchUrl(Uri.parse(url)).ignore();
   }
 }
