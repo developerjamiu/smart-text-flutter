@@ -97,14 +97,35 @@ class AndroidTextClassifer : TextClassifer {
             val currentText = text.substring(currentLink.start, currentLink.end)
             val linkSpan: ItemSpan = when (currentLink.type) {
                 "address" -> ItemSpan(currentText, "address", currentText)
-                "phone" -> ItemSpan(currentText, "phone", "tel://" + currentText)
-                "email" -> ItemSpan(currentText, "email", "mailto:" + currentText)
+                "phone" -> {
+                    val phone = if (currentText.startsWith("tel://")) {
+                        currentText
+                    } else {
+                        "tel://$currentText"
+                    }
+                    ItemSpan(currentText, "phone", phone)
+                }
+                "email" -> {
+                    val email = if (currentText.startsWith("mailto:")) {
+                        currentText
+                    } else {
+                        "mailto:$currentText"
+                    }
+                    ItemSpan(currentText, "email", email)
+                }
                 "datetime" -> ItemSpan(
                     currentText,
                     "datetime",
                     currentText
                 )
-                "url" -> ItemSpan(currentText, "url", "http://" + currentText)
+                "url" -> {
+                    val url = if (currentText.startsWith("http://") || currentText.startsWith("https://")) {
+                        currentText
+                    } else {
+                        "https://$currentText"
+                    }
+                    ItemSpan(currentText, "url", url)
+                }
                 else -> ItemSpan(currentText, "text", currentText)
             }
 
