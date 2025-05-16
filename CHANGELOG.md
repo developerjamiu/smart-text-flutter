@@ -1,3 +1,9 @@
+## 0.3.5
+
+### Added
+
+- Fix app crash when text starting with emoji is entered
+
 ## 0.3.4
 
 ### Added
