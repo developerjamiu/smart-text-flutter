@@ -26,15 +26,25 @@ class AppleTextClassifier : TextClassifier {
         var resultList = [ItemSpan]()
         
         if links.isEmpty {
-            return text.isEmpty ? [ItemSpan(text: text, type: "text",rawValue: text)] : []
+            return text.isEmpty ? [ItemSpan(text: text, type: "text", rawValue: text)] : []
         }
         
         var previousEnd = 0
+        let textUTF16 = text.utf16
         
         for link in links {
-            let textBefore = String(text[text.index(text.startIndex, offsetBy: previousEnd)..<text.index(text.startIndex, offsetBy: link.start)])
-            if !textBefore.isEmpty {
-                resultList.append(ItemSpan(text: textBefore, type: "text",rawValue: textBefore))
+            let utf16Start = textUTF16.index(textUTF16.startIndex, offsetBy: link.start)
+            let utf16End = textUTF16.index(textUTF16.startIndex, offsetBy: link.end)
+            
+            // Convert UTF-16 indexes to String indexes
+            let startIndex = String.Index(utf16Start, within: text)!
+            let endIndex = String.Index(utf16End, within: text)!
+            
+            if previousEnd < link.start {
+                let textBefore = String(text[text.index(text.startIndex, offsetBy: previousEnd)..<startIndex])
+                if !textBefore.isEmpty {
+                    resultList.append(ItemSpan(text: textBefore, type: "text", rawValue: textBefore))
+                }
             }
             
             let entityType = link.type
@@ -59,18 +69,23 @@ class AppleTextClassifier : TextClassifier {
                 rawValue = url
             }
             
-            let linkSpan = ItemSpan(text: String(text[text.index(text.startIndex, offsetBy: link.start)..<text.index(text.startIndex, offsetBy: link.end)]), type: linkType, rawValue: rawValue)
-            resultList.append(linkSpan)
+            let linkText = String(text[startIndex..<endIndex])
+            resultList.append(ItemSpan(text: linkText, type: linkType, rawValue: rawValue))
+            
             previousEnd = link.end
         }
         
-        let textAfter = String(text[text.index(text.startIndex, offsetBy: links.last!.end)...])
-        if !textAfter.isEmpty {
-            resultList.append(ItemSpan(text: textAfter, type: "text",  rawValue: textAfter))
+       
+        if previousEnd < text.count {
+            let textAfter = String(text[text.index(text.startIndex, offsetBy: previousEnd)...])
+            if !textAfter.isEmpty {
+                resultList.append(ItemSpan(text: textAfter, type: "text", rawValue: textAfter))
+            }
         }
         
         return resultList
     }
+
 }
 
 struct ItemSpan {
